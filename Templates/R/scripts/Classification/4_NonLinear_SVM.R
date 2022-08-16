@@ -2,7 +2,7 @@ library(e1071)
 library(caTools)
 library(class)
 
-# Support Vector Machine (SVM)
+# Kernel Support Vector Machine (SVM)
 
 # Importing Dataset
 dataset <- utils::read.csv('./input/Social_Network_Ads.csv')
@@ -21,11 +21,11 @@ test_set <- base::subset(dataset, split == FALSE)
 training_set[,1:2] = base::scale(training_set[, 1:2])
 test_set[,1:2] = base::scale(test_set[, 1:2])
 
-# Fitting the SVM to the training set 
+# Fitting the Non Linear Kernel SVM to the training set 
 classifier <- e1071::svm(formula = Purchased ~ .,
                      data = training_set,
                      type = 'C-classification',
-                     kernel = 'linear')
+                     kernel = 'radial')
 
 # Predicting the Test set results
 y_pred <- predict(classifier, newdata = test_set[-3])

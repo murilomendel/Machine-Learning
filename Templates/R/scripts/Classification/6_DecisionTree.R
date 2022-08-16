@@ -1,8 +1,8 @@
-library(e1071)
+library(rpart)
 library(caTools)
 library(class)
 
-# Support Vector Machine (SVM)
+# Decision Tree
 
 # Importing Dataset
 dataset <- utils::read.csv('./input/Social_Network_Ads.csv')
@@ -18,18 +18,20 @@ training_set <- base::subset(dataset, split == TRUE)
 test_set <- base::subset(dataset, split == FALSE)
 
 # Feature Scaling
-training_set[,1:2] = base::scale(training_set[, 1:2])
-test_set[,1:2] = base::scale(test_set[, 1:2])
+# training_set[,1:2] = base::scale(training_set[, 1:2])
+# test_set[,1:2] = base::scale(test_set[, 1:2])
 
-# Fitting the SVM to the training set 
-classifier <- e1071::svm(formula = Purchased ~ .,
-                     data = training_set,
-                     type = 'C-classification',
-                     kernel = 'linear')
+# Fitting the Naive Bayes to the training set 
+classifier <- rpart::rpart(formula = Purchased ~ .,
+                           data = training_set)
 
 # Predicting the Test set results
-y_pred <- predict(classifier, newdata = test_set[-3])
+y_pred <- predict(classifier, newdata = test_set[-3], type = 'class')
 
 # Making the confusion Matrix
 cm <- base::table(test_set[, 3], y_pred)
 cm
+
+# Plotting Decision Tree
+plot(classifier)
+text(classifier)
